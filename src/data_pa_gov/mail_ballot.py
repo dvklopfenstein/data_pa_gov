@@ -1,5 +1,7 @@
 """2020 General Election Unofficial Mail Ballot Processing Current Hourly County State"""
 
+__copyright__ = "Copyright (C) 2014-present DV Klopfenstein. All rights reserved."
+__author__ = 'DV Klopfenstein'
 
 from collections import namedtuple
 
@@ -19,7 +21,6 @@ class MailBallotData:
                     ntd = nto._make(
                         [int(dat[0]), int(dat[1]), dat[2], float(dat[3]), int(dat[4]), int(dat[5])])
                     nts.append(ntd)
-                    print(ntd)
                 else:
                     nto = namedtuple('MailBallotStatus', self._adj_hdr(dat))
         print('**READ: {CSV}'.format(CSV=csv))
