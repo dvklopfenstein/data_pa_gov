@@ -21,7 +21,7 @@ def main():
         assert abs(perc_counted - ntd.perc_counted) < .001, '{} {}'.format(perc_counted, ntd)
         assert ntd.Ballots_Cast - ntd.Ballots_Counted == ntd.Ballots_Remaining
     plt = MailBallotPlot(nts)
-    plt.plt_perc_all(repofn('doc/images/mail_ballot_issued.png'))
+    plt.plt_cnt_all(repofn('doc/images/y2020_11_mail_ballot_issued.png'))
 
 
 if __name__ == '__main__':
