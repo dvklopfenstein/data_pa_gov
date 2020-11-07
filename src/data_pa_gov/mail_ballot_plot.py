@@ -32,30 +32,58 @@ class MailBallotPlot:
 
     def plt_blue_v_red(self, fout_img):
         """Plot bright blue counties vs red counties"""
-        dct_txt = {'rotation':90, 'fontsize':6}
+        dct_txt = {'rotation':90, 'fontsize':12}
         nts = self._get_blue_v_red()
         # Plot
         fig, (ax0, ax1, ax2) = plt.subplots(nrows=1, ncols=3)
         fig.set_size_inches(10, 12)
         day = self.time.strftime('%a')
         fig.suptitle(
-            'Pennsylvania Bright Blue vs. Light Blue and Red Mail-in Ballot Data {D} {T}'.format(D=day, T=self.time),
-            va='top', y=0.94, fontsize=15)
+            'PA Bright Blue vs. Light Blue and Red Mail-in Ballots {D} {T}'.format(D=day, T=self.time),
+            va='top', fontsize=15, y=.97)
         # Three plots
         xvals = [0, 1]
         self._cnt1_mailballots_sent(ax0, xvals, nts, dct_txt)
-        self._cnt0_mailballots_sent(ax2, xvals, nts, dct_txt)
         self._perc_mailballot_status(ax1, xvals, nts)
-        # Plotting frame
-        ax0.xticks(xvals, [nt.County for nt in nts], **dct_txt)
-        plt.xlabel('{N} Bright Blue v Light Ble and Red'.format(N=self.num_counties), fontsize=12)
-        #plt.xlim(-1, self.num_counties + 1)
-        #fig.subplots_adjust(bottom=0.4)
-        plt.savefig(fout_img, bbox_inches='tight', pad_inches=0, dpi=300)
+        self._cnt0_mailballots_sent(ax2, xvals, nts, dct_txt)
+        # Set xlabels: "Bright Blue" vs "Light Blue/Red"
+        ax0.set_xticks(xvals)
+        ax0.set_xticklabels([nt.County for nt in nts], fontsize=12)
+        ax1.set_xticks(xvals)
+        ax1.set_xticklabels([nt.County for nt in nts], fontsize=12)
+        ax2.set_xticks(xvals)
+        ax2.set_xticklabels([nt.County for nt in nts], fontsize=12)
+        # xticklabel size
+        self._set_ticklabelsize(12, ax0.yaxis.get_major_ticks())
+        self._set_ticklabelsize(12, ax1.yaxis.get_major_ticks())
+        self._set_ticklabelsize(12, ax2.yaxis.get_major_ticks())
+        # xlim
+        ax0.set_ylim(0, 1845000)
+        ax2.set_ylim(0, 115000)
+        # Titles
+        ax0.set_title('Mail Ballots Issued', fontsize=15)
+        ax1.set_title('Ballots: Issued, Cast, Counted', fontsize=15)
+        ax2.set_title('Cast, not yet Counted', fontsize=15)
+        # Adjust spacing and Save
+        fig.tight_layout()
+        fig.subplots_adjust(top=0.9)
+        plt.savefig(fout_img, dpi=300)
         print('**WROTE: {IMG}'.format(IMG=fout_img))
         fout2 = self._get_filename_dated(fout_img)
-        plt.savefig(fout2, bbox_inches='tight', pad_inches=0, dpi=300)
+        plt.savefig(fout2, dpi=300)
         print('**WROTE: {IMG}'.format(IMG=fout2))
+
+    @staticmethod
+    def _set_ticklabelsize(fontsize, major_ticks):
+        """Set the xtick label size"""
+        for tick in major_ticks:
+            tick.label.set_fontsize(fontsize)
+
+    @staticmethod
+    def _set_ticklabelcomma(major_ticks):
+        """Set the xtick label size"""
+        for tick in major_ticks:
+            tick.label.set_fontsize(fontsize)
 
     def plt_counties(self, fout_img):
         """Plot all ballot percentages"""
@@ -69,8 +97,8 @@ class MailBallotPlot:
             va='top', y=0.94, fontsize=15)
         # Three plots
         num_sent = self._cnt1_mailballots_sent(ax0, self.xvals, self.nts, dct_txt)
-        num_uncounted = self._cnt0_mailballots_sent(ax2, self.xvals, self.nts, dct_txt)
         self._perc_mailballot_status(ax1, self.xvals, self.nts)
+        num_uncounted = self._cnt0_mailballots_sent(ax2, self.xvals, self.nts, dct_txt)
         # Titles
         ax0.set_title(
             '{N:,} Mail-in Ballots Issued to Pennsylvania Voters: 2020 General Election'.format(
@@ -81,11 +109,12 @@ class MailBallotPlot:
         ax2.set_title(
             '{N:,} Mail-in Ballots Cast but not yet Counted: 2020 General Election'.format(
                 N=num_uncounted))
+        ax0.set_ylabel('Mail Ballots Issued')
+        ax2.set_ylabel('Ballots Cast, not yet Counted')
         # Plotting frame
         plt.xticks(self.xvals, [nt.County for nt in self.nts], **dct_txt)
         plt.xlabel('{N} Pennsylvania Counties'.format(N=self.num_counties), fontsize=12)
         plt.xlim(-1, self.num_counties + 1)
-        #fig.subplots_adjust(bottom=0.4)
         plt.savefig(fout_img, bbox_inches='tight', pad_inches=0, dpi=300)
         print('**WROTE: {IMG}'.format(IMG=fout_img))
         fout2 = self._get_filename_dated(fout_img)
@@ -123,7 +152,7 @@ class MailBallotPlot:
     def _get_filename_dated(self, fout_img):
         """Insert date into filename"""
         fname, ext = splitext(fout_img)
-        return '{F}_{D}.{E}'.format(F=fname, D=self.time.strftime('%Y_%m%d_%I%M'), E=ext)
+        return '{F}_{D}{E}'.format(F=fname, D=self.time.strftime('%Y_%m%d_%I%M'), E=ext)
 
     def _perc_mailballot_status(self, axes, xvals, nts):
         """Bar chart of mail-in ballot status"""
@@ -150,7 +179,6 @@ class MailBallotPlot:
         axes.bar(xvals, cnts, width=.5, label='Ballots_Issued_to_Voters')
         for xval, cnt in enumerate(cnts):
             axes.text(xval, cnt + 10000, '{:,}'.format(cnt), va='bottom', ha='center', **dct_txt)
-        axes.set_ylabel('Mail Ballots Issued')
         axes.set_ylim(0, max(cnts) + 130000)
         return sum(cnts)
 
@@ -161,7 +189,6 @@ class MailBallotPlot:
         axes.bar(xvals, cnts, width=.5, label='Ballots_Issued_to_Voters', alpha=.7, color='r')
         for xval, cnt in enumerate(cnts):
             axes.text(xval, cnt + 1500, '{:,}'.format(cnt), va='bottom', ha='center', **dct_txt)
-        axes.set_ylabel('Ballots Cast, not yet Counted')
         axes.set_ylim(0, max(cnts) + 15000)
         axes.grid(True, axis='y')
         return sum(cnts)
