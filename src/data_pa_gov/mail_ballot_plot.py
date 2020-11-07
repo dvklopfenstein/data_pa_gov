@@ -47,7 +47,7 @@ class MailBallotPlot:
         self._cnt0_mailballots_sent(ax2, xvals, nts, dct_txt)
         self._perc_mailballot_status(ax1, xvals, nts)
         # Plotting frame
-        #plt.xticks(xvals, [nt.County for nt in dct['BrBlue']], **dct_txt)
+        ax0.xticks(xvals, [nt.County for nt in nts], **dct_txt)
         plt.xlabel('{N} Bright Blue v Light Ble and Red'.format(N=self.num_counties), fontsize=12)
         #plt.xlim(-1, self.num_counties + 1)
         #fig.subplots_adjust(bottom=0.4)
