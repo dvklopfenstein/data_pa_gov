@@ -3,11 +3,16 @@
 __copyright__ = "Copyright (C) 2014-present DV Klopfenstein. All rights reserved."
 __author__ = 'DV Klopfenstein'
 
+from datetime import datetime
 from collections import namedtuple
 
 
 class MailBallotData:
     """2020 General Election Unofficial Mail Ballot Processing Current Hourly County State"""
+
+    def __init__(self, csv, time):
+        self.time = datetime.strptime(time, '%Y-%m-%d %I:%M')
+        self.nts = self.read_csv(csv)
 
     def read_csv(self, csv):
         """How many mail ballots still need to be counted?"""

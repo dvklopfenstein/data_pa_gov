@@ -4,7 +4,6 @@ __copyright__ = "Copyright (C) 2014-present DV Klopfenstein. All rights reserved
 __author__ = 'DV Klopfenstein'
 
 from os.path import splitext
-from datetime import datetime
 
 import matplotlib
 matplotlib.use('agg')
@@ -15,9 +14,9 @@ import matplotlib.pyplot as plt
 class MailBallotPlot:
     """2020 General Election Unofficial Mail Ballot Processing Current Hourly County State"""
 
-    def __init__(self, nts, time):
-        self.time = datetime.strptime(time, '%Y-%m-%d %I:%M')
-        self.nts = sorted(nts, key=lambda nt: nt.Ballots_Issued_to_Voters)
+    def __init__(self, dataobj):
+        self.time = dataobj.time
+        self.nts = sorted(dataobj.nts, key=lambda nt: nt.Ballots_Issued_to_Voters)
         self.xvals = range(len(self.nts))
         self.num_counties = len(self.xvals)
 
