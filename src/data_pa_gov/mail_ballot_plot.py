@@ -3,6 +3,7 @@
 __copyright__ = "Copyright (C) 2014-present DV Klopfenstein. All rights reserved."
 __author__ = 'DV Klopfenstein'
 
+from os.path import splitext
 from datetime import datetime
 
 import matplotlib
@@ -15,7 +16,7 @@ class MailBallotPlot:
     """2020 General Election Unofficial Mail Ballot Processing Current Hourly County State"""
 
     def __init__(self, nts, time):
-        self.time = time
+        self.time = datetime.strptime(time, '%Y-%m-%d %I:%M')
         self.nts = sorted(nts, key=lambda nt: nt.Ballots_Issued_to_Voters)
         self.xvals = range(len(self.nts))
         self.num_counties = len(self.xvals)
@@ -26,8 +27,10 @@ class MailBallotPlot:
         # Plot
         fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
         fig.set_size_inches(10, 12)
-        day = datetime.strptime(self.time, '%Y-%m-%d %I:%M').strftime('%a')
-        fig.suptitle('Pennsylvania Mail-in Ballot Data {D} {T}'.format(D=day, T=self.time), fontsize=15)
+        day = self.time.strftime('%a')
+        fig.suptitle(
+            'Pennsylvania Mail-in Ballot Data {D} {T}'.format(D=day, T=self.time),
+            va='top', y=0.94, fontsize=15)
         self._cnt1_mailballots_sent(ax0, dct_txt)
         self._cnt0_mailballots_sent(ax2, dct_txt)
         self._perc_mailballot_status(ax1)
@@ -37,6 +40,14 @@ class MailBallotPlot:
         #fig.subplots_adjust(bottom=0.4)
         plt.savefig(fout_img, bbox_inches='tight', pad_inches=0, dpi=300)
         print('**WROTE: {IMG}'.format(IMG=fout_img))
+        fout2 = self._get_filename_dated(fout_img)
+        plt.savefig(fout2, bbox_inches='tight', pad_inches=0, dpi=300)
+        print('**WROTE: {IMG}'.format(IMG=fout2))
+
+    def _get_filename_dated(self, fout_img):
+        """Insert date into filename"""
+        fname, ext = splitext(fout_img)
+        return '{F}_{D}.{E}'.format(F=fname, D=self.time.strftime('%Y_%m%d_%I%M'), E=ext)
 
     def _perc_mailballot_status(self, axes):
         """Bar chart of mail-in ballot status"""
