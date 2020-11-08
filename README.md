@@ -2,13 +2,13 @@
 Work with the [opendata](https://data.pa.gov/) from the Commonwealth of Pennsylvania
 
 * Mail in Ballots in Pennsylvania for the Nov 2020 General Election
-  * [Summary for Mail-in Ballots](#data_pa_gov#summary-for-mail-in-ballots)
-  * [PA Counties for Mail-in Ballots](#data_pa_gov#county-data-for-mail-in-ballots)
+  * [Summary for Mail-in Ballots](#pa-summary-for-mail-in-ballots)
+  * [PA Counties for Mail-in Ballots](#pa-county-data-for-mail-in-ballots)
 
-## Summary for Mail-in Ballots
+## PA Summary for Mail-in Ballots
 ![Red Blue](/doc/images/mail_ballot_red_blue.png)    
 
-## County data for Mail-in Ballots
+## PA County data for Mail-in Ballots
 ![Counties](/doc/images/mail_ballot_all.png)    
 
 ## Links
