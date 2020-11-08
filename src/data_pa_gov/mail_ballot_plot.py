@@ -39,7 +39,7 @@ class MailBallotPlot:
         fig.set_size_inches(20, 12)
         day = self.time.strftime('%a')
         fig.suptitle(
-            'PA Bright Blue vs. Light Blue and Red Mail-in Ballots {D} {T}'.format(D=day, T=self.time),
+            'PA Mail-in Ballots: Bright Blue vs. Light Blue and Red ({D} {T})'.format(D=day, T=self.time),
             va='top', fontsize=32, y=.97)
         # Three plots
         xvals = [0, 1]
