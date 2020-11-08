@@ -11,7 +11,7 @@ class MailBallotData:
     """2020 General Election Unofficial Mail Ballot Processing Current Hourly County State"""
 
     def __init__(self, csv, time):
-        self.time = datetime.strptime(time, '%Y-%m-%d %I:%M')
+        self.time = datetime.strptime(time, '%Y-%m-%d %H:%M')
         self.nts = self.read_csv(csv)
 
     def read_csv(self, csv):

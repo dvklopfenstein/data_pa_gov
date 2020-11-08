@@ -13,7 +13,7 @@ def main():
     """Examine General Election Unofficial Mail Ballot Processing Current Hourly County State"""
     # pylint: disable=line-too-long
     csv = 'data/2020_General_Election_Unofficial_Mail_Ballot_Processing_Current_Hourly_County_State.csv'
-    obj = MailBallotData(repofn(csv), '2020-11-06 10:39')  # $ stat | grep Birth
+    obj = MailBallotData(repofn(csv), '2020-11-07 19:20')  # $ stat | grep Birth
     for ntd in sorted(obj.nts, key=lambda nt: nt.Ballots_Issued_to_Voters):
         perc_counted = ntd.Ballots_Counted/ntd.Ballots_Cast
         print(ntd)

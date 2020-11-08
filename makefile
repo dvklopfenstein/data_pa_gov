@@ -1,3 +1,5 @@
+add:
+	git add doc/images/*.png
 
 pylint:
 	@git status -uno | perl -ne 'if (/(\S+.py)/) {printf "echo $$1\npylint -r no %s\n", $$1}' | tee tmp_pylint
