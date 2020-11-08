@@ -1,4 +1,4 @@
-"""2020 General Election Unofficial Mail Ballot Processing Current Hourly County State"""
+"""2020 General Election Unofficial Mail Ballot Processing Current Hourly county State"""
 
 __copyright__ = "Copyright (C) 2014-present DV Klopfenstein. All rights reserved."
 __author__ = 'DV Klopfenstein'
@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 # pylint: disable=line-too-long
 class MailBallotPlot:
-    """2020 General Election Unofficial Mail Ballot Processing Current Hourly County State"""
+    """2020 General Election Unofficial Mail Ballot Processing Current Hourly county State"""
 
     # https://www.inquirer.com/politics/election/inq/pennsylvania-election-results-2020-20201103.html
     bright_blue_counties = {
@@ -26,7 +26,7 @@ class MailBallotPlot:
 
     def __init__(self, dataobj):
         self.time = dataobj.time
-        self.nts = sorted(dataobj.nts, key=lambda nt: nt.Ballots_Issued_to_Voters)
+        self.nts = sorted(dataobj.nts, key=lambda nt: nt.ballots_issued_to_voters)
         self.xvals = range(len(self.nts))
         self.num_counties = len(self.xvals)
 
@@ -49,11 +49,11 @@ class MailBallotPlot:
         # Set xlabels: "Bright Blue" vs "Light Blue/Red"
         ticklabelsize = 27
         ax0.set_xticks(xvals)
-        ax0.set_xticklabels([nt.County for nt in nts], fontsize=ticklabelsize)
+        ax0.set_xticklabels([nt.county for nt in nts], fontsize=ticklabelsize)
         ax1.set_xticks(xvals)
-        ax1.set_xticklabels([nt.County for nt in nts], fontsize=ticklabelsize)
+        ax1.set_xticklabels([nt.county for nt in nts], fontsize=ticklabelsize)
         ax2.set_xticks(xvals)
-        ax2.set_xticklabels([nt.County for nt in nts], fontsize=ticklabelsize)
+        ax2.set_xticklabels([nt.county for nt in nts], fontsize=ticklabelsize)
         # xticklabel size
         self._set_ticklabelsize(ticklabelsize, ax0.yaxis.get_major_ticks())
         self._set_ticklabelsize(ticklabelsize, ax1.yaxis.get_major_ticks())
@@ -105,15 +105,15 @@ class MailBallotPlot:
             '{N:,} Mail-in Ballots Issued to Pennsylvania Voters: 2020 General Election'.format(
                 N=num_sent))
         ax1.set_title('Mail-in ballot status: {C:,} cast; {c:,} counted'.format(
-            C=sum(nt.Ballots_Cast for nt in self.nts),
-            c=sum(nt.Ballots_Counted for nt in self.nts)))
+            C=sum(nt.ballots_cast for nt in self.nts),
+            c=sum(nt.ballots_counted for nt in self.nts)))
         ax2.set_title(
             '{N:,} Mail-in Ballots Cast but not yet Counted: 2020 General Election'.format(
                 N=num_uncounted))
         ax0.set_ylabel('Mail Ballots Issued')
         ax2.set_ylabel('Ballots Cast, not yet Counted')
         # Plotting frame
-        plt.xticks(self.xvals, [nt.County for nt in self.nts], **dct_txt)
+        plt.xticks(self.xvals, [nt.county for nt in self.nts], **dct_txt)
         plt.xlabel('{N} Pennsylvania Counties'.format(N=self.num_counties), fontsize=12)
         plt.xlim(-1, self.num_counties + 1)
         plt.savefig(fout_img, bbox_inches='tight', pad_inches=0, dpi=300)
@@ -123,31 +123,29 @@ class MailBallotPlot:
         print('**WROTE: {IMG}'.format(IMG=fout2))
 
     @staticmethod
-    def _get_issued_cast_counted(nts):
+    def get_issued_cast_counted(nts):
         """Sum ballot numbers"""
-        issued_cast_counted = [(nt.Ballots_Issued_to_Voters, nt.Ballots_Cast, nt.Ballots_Counted) for nt in nts]
+        issued_cast_counted = [(nt.ballots_issued_to_voters, nt.ballots_cast, nt.ballots_counted) for nt in nts]
         issued, cast, counted = zip(*issued_cast_counted)
         return {'issued': sum(issued), 'cast': sum(cast), 'counted': sum(counted)}
 
     def _get_blue_v_red(self):
         """Get summary data for bright blue counties and red counties"""
         bright_blue_counties = self.bright_blue_counties
-        bb1 = self._get_issued_cast_counted(set(nt for nt in self.nts if nt.County in bright_blue_counties))
-        bb0 = self._get_issued_cast_counted(set(nt for nt in self.nts if nt.County not in bright_blue_counties))
-        print(bb1)
-        print(bb0)
-        nto = namedtuple('RedBlue', 'Ballots_Issued_to_Voters Ballots_Cast County Ballots_Counted')
+        bb1 = self.get_issued_cast_counted(set(nt for nt in self.nts if nt.county in bright_blue_counties))
+        bb0 = self.get_issued_cast_counted(set(nt for nt in self.nts if nt.county not in bright_blue_counties))
+        nto = namedtuple('RedBlue', 'ballots_issued_to_voters ballots_cast county ballots_counted')
         return [
             nto(
-                Ballots_Issued_to_Voters=bb1['issued'],
-                Ballots_Cast=bb1['cast'],
-                County='Bright Blue',
-                Ballots_Counted=bb1['counted']),
+                ballots_issued_to_voters=bb1['issued'],
+                ballots_cast=bb1['cast'],
+                county='Bright Blue',
+                ballots_counted=bb1['counted']),
             nto(
-                Ballots_Issued_to_Voters=bb0['issued'],
-                Ballots_Cast=bb0['cast'],
-                County='Light Blue/Red',
-                Ballots_Counted=bb0['counted']),
+                ballots_issued_to_voters=bb0['issued'],
+                ballots_cast=bb0['cast'],
+                county='Light Blue/Red',
+                ballots_counted=bb0['counted']),
         ] 
 
     def _get_filename_dated(self, fout_img):
@@ -161,13 +159,13 @@ class MailBallotPlot:
         ydash = [.2, .4, .6, .8, 1.0]
         axes.grid(True, axis='y')
         # Mail-in ballots cast and counted
-        counted1 = [nt.Ballots_Counted/nt.Ballots_Issued_to_Voters for nt in nts]
+        counted1 = [nt.ballots_counted/nt.ballots_issued_to_voters for nt in nts]
         axes.bar(xvals, counted1, width=.5, color='g', alpha=.7)
         # Mail-in ballots cast, but not counted
-        counted0 = [(nt.Ballots_Cast - nt.Ballots_Counted)/nt.Ballots_Issued_to_Voters for nt in nts]
+        counted0 = [(nt.ballots_cast - nt.ballots_counted)/nt.ballots_issued_to_voters for nt in nts]
         axes.bar(xvals, counted0, width=.5, color='r', bottom=counted1, alpha=.7)
         # Mail-in ballots sent, but not cast
-        cast0 = [(nt.Ballots_Issued_to_Voters - nt.Ballots_Cast)/nt.Ballots_Issued_to_Voters for nt in nts]
+        cast0 = [(nt.ballots_issued_to_voters - nt.ballots_cast)/nt.ballots_issued_to_voters for nt in nts]
         bottom = [1.0 - n for n in cast0]
         axes.set_yticks(ydash)
         axes.set_yticklabels(['{:3.0f}%'.format(n*100) for n in ydash])
@@ -176,8 +174,8 @@ class MailBallotPlot:
     @staticmethod
     def _cnt1_mailballots_sent(axes, xvals, nts, dct_txt):
         """Total Mail-in Ballots Issued to Pennsylvania Voters"""
-        cnts = [nt.Ballots_Issued_to_Voters for nt in nts]
-        axes.bar(xvals, cnts, width=.5, label='Ballots_Issued_to_Voters')
+        cnts = [nt.ballots_issued_to_voters for nt in nts]
+        axes.bar(xvals, cnts, width=.5, label='ballots_issued_to_voters')
         for xval, cnt in enumerate(cnts):
             axes.text(xval, cnt + 10000, '{:,}'.format(cnt), va='bottom', ha='center', **dct_txt)
         axes.set_ylim(0, max(cnts) + 130000)
@@ -186,8 +184,8 @@ class MailBallotPlot:
     @staticmethod
     def _cnt0_mailballots_sent(axes, xvals, nts, dct_txt):
         """Total Mail-in Ballots that were cast and counted"""
-        cnts = [nt.Ballots_Cast - nt.Ballots_Counted for nt in nts]
-        axes.bar(xvals, cnts, width=.5, label='Ballots_Issued_to_Voters', alpha=.7, color='r')
+        cnts = [nt.ballots_cast - nt.ballots_counted for nt in nts]
+        axes.bar(xvals, cnts, width=.5, label='ballots_issued_to_voters', alpha=.7, color='r')
         for xval, cnt in enumerate(cnts):
             axes.text(xval, cnt + 1500, '{:,}'.format(cnt), va='bottom', ha='center', **dct_txt)
         axes.set_ylim(0, max(cnts) + 15000)

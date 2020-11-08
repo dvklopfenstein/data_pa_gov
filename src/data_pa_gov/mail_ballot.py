@@ -39,7 +39,7 @@ class MailBallotData:
             val = val.replace(' ', '_')
             if val[0] == '%':
                 val = val.replace('%', 'perc')
-            adj.append(val)
+            adj.append(val.lower())
         return adj
 
 

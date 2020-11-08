@@ -14,12 +14,16 @@ def main():
     # pylint: disable=line-too-long
     csv = 'data/2020_General_Election_Unofficial_Mail_Ballot_Processing_Current_Hourly_County_State.csv'
     obj = MailBallotData(repofn(csv), '2020-11-08 13:51')  # $ stat | grep Birth
-    for ntd in sorted(obj.nts, key=lambda nt: nt.Ballots_Issued_to_Voters):
-        perc_counted = ntd.Ballots_Counted/ntd.Ballots_Cast
+    for ntd in sorted(obj.nts, key=lambda nt: nt.ballots_issued_to_voters):
+        perc_counted = ntd.ballots_counted/ntd.ballots_cast
         print(ntd)
         assert abs(perc_counted - ntd.perc_counted) < .001, '{} {}'.format(perc_counted, ntd)
-        assert ntd.Ballots_Cast - ntd.Ballots_Counted == ntd.Ballots_Remaining
+        assert ntd.ballots_cast - ntd.ballots_counted == ntd.ballots_remaining
+
     plt = MailBallotPlot(obj)
+    dct = plt.get_issued_cast_counted(obj.nts)
+    print('issued({issued:,}) cast({cast:,}) counted({counted:,}) remaining({R:,})'.format(
+        R=dct['cast'] - dct['counted'], **dct))
     plt.plt_counties(repofn('doc/images/mail_ballot_all.png'))
     plt.plt_blue_v_red(repofn('doc/images/mail_ballot_red_blue.png'))
 
