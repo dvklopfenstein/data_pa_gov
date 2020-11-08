@@ -6,15 +6,20 @@ __author__ = 'DV Klopfenstein'
 
 import pandas as pd
 from sodapy import Socrata
+from datetime import datetime
 
 def main():
     """Download Election Unofficial Mail Ballot Processing Current Hourly County State"""
     client = Socrata("data.pa.gov", None)
+    meta = client.get_metadata("pg3c-9a9m")
+    print(meta)
+    print(datetime.fromtimestamp(meta['rowsUpdatedAt']))
+
     # dictionaries by sodapy.
     results = client.get("pg3c-9a9m", limit=2000)
-    print(results)
     results_df = pd.DataFrame.from_records(results)
     print(results_df)
+
 
 if __name__ == '__main__':
     main()
