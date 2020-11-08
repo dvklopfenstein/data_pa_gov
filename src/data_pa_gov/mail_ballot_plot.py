@@ -1,4 +1,4 @@
-"a""2020 General Election Unofficial Mail Ballot Processing Current Hourly County State"""
+"""2020 General Election Unofficial Mail Ballot Processing Current Hourly County State"""
 
 __copyright__ = "Copyright (C) 2014-present DV Klopfenstein. All rights reserved."
 __author__ = 'DV Klopfenstein'
@@ -32,41 +32,42 @@ class MailBallotPlot:
 
     def plt_blue_v_red(self, fout_img):
         """Plot bright blue counties vs red counties"""
-        dct_txt = {'rotation':90, 'fontsize':12}
+        dct_txt = {'rotation':90, 'fontsize':25} # Text above bars
         nts = self._get_blue_v_red()
         # Plot
         fig, (ax0, ax1, ax2) = plt.subplots(nrows=1, ncols=3)
-        fig.set_size_inches(10, 12)
+        fig.set_size_inches(20, 12)
         day = self.time.strftime('%a')
         fig.suptitle(
             'PA Bright Blue vs. Light Blue and Red Mail-in Ballots {D} {T}'.format(D=day, T=self.time),
-            va='top', fontsize=15, y=.97)
+            va='top', fontsize=32, y=.97)
         # Three plots
         xvals = [0, 1]
         self._cnt1_mailballots_sent(ax0, xvals, nts, dct_txt)
         self._perc_mailballot_status(ax1, xvals, nts)
         self._cnt0_mailballots_sent(ax2, xvals, nts, dct_txt)
         # Set xlabels: "Bright Blue" vs "Light Blue/Red"
+        ticklabelsize = 27
         ax0.set_xticks(xvals)
-        ax0.set_xticklabels([nt.County for nt in nts], fontsize=12)
+        ax0.set_xticklabels([nt.County for nt in nts], fontsize=ticklabelsize)
         ax1.set_xticks(xvals)
-        ax1.set_xticklabels([nt.County for nt in nts], fontsize=12)
+        ax1.set_xticklabels([nt.County for nt in nts], fontsize=ticklabelsize)
         ax2.set_xticks(xvals)
-        ax2.set_xticklabels([nt.County for nt in nts], fontsize=12)
+        ax2.set_xticklabels([nt.County for nt in nts], fontsize=ticklabelsize)
         # xticklabel size
-        self._set_ticklabelsize(12, ax0.yaxis.get_major_ticks())
-        self._set_ticklabelsize(12, ax1.yaxis.get_major_ticks())
-        self._set_ticklabelsize(12, ax2.yaxis.get_major_ticks())
-        # xlim
-        ax0.set_ylim(0, 1845000)
-        ax2.set_ylim(0, 115000)
+        self._set_ticklabelsize(ticklabelsize, ax0.yaxis.get_major_ticks())
+        self._set_ticklabelsize(ticklabelsize, ax1.yaxis.get_major_ticks())
+        self._set_ticklabelsize(ticklabelsize, ax2.yaxis.get_major_ticks())
+        # ylim
+        ax0.set_ylim(0, 2100000)
+        ax2.set_ylim(0, 135000)
         # Titles
-        ax0.set_title('Mail Ballots Issued', fontsize=15)
-        ax1.set_title('Ballots: Issued, Cast, Counted', fontsize=15)
-        ax2.set_title('Cast, not yet Counted', fontsize=15)
+        ax0.set_title('Mail Ballots Issued', fontsize=ticklabelsize)
+        ax1.set_title('Ballots: Issued, Cast, Counted', fontsize=ticklabelsize)
+        ax2.set_title('Cast, not yet Counted', fontsize=ticklabelsize)
         # Adjust spacing and Save
         fig.tight_layout()
-        fig.subplots_adjust(top=0.9)
+        fig.subplots_adjust(top=0.85)
         plt.savefig(fout_img, dpi=300)
         print('**WROTE: {IMG}'.format(IMG=fout_img))
         fout2 = self._get_filename_dated(fout_img)

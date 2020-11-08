@@ -20,7 +20,7 @@ def main():
         assert abs(perc_counted - ntd.perc_counted) < .001, '{} {}'.format(perc_counted, ntd)
         assert ntd.Ballots_Cast - ntd.Ballots_Counted == ntd.Ballots_Remaining
     plt = MailBallotPlot(obj)
-    plt.plt_counties(repofn('doc/images/mail_ballot_all.png'))
+    #plt.plt_counties(repofn('doc/images/mail_ballot_all.png'))
     plt.plt_blue_v_red(repofn('doc/images/mail_ballot_red_blue.png'))
 
 

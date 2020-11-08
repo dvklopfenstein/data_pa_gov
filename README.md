@@ -1,6 +1,10 @@
 # PA Government Open Data
 Work with the [opendata](https://data.pa.gov/) from the Commonwealth of Pennsylvania
 
+* Mail in Ballots in Pennsylvania
+  * [Summary for Mail-in Ballots](#data_pa_gov#summary-for-mail-in-ballots)
+  * [PA Counties for Mail-in Ballots](#data_pa_gov#county-data-for-mail-in-ballots)
+
 ## Summary for Mail-in Ballots
 ![Red Blue](/doc/images/mail_ballot_red_blue.png)    
 
