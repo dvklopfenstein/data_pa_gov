@@ -4,6 +4,7 @@
 __copyright__ = "Copyright (C) 2014-present DV Klopfenstein. All rights reserved."
 __author__ = 'DV Klopfenstein'
 
+from data_pa_gov.cfg import Cfg
 from data_pa_gov.mail_ballot import MailBallotData
 from data_pa_gov.mail_ballot_plot import MailBallotPlot
 from tests.utils import repofn
@@ -13,6 +14,7 @@ def main():
     """Examine General Election Unofficial Mail Ballot Processing Current Hourly County State"""
     # pylint: disable=line-too-long
     csv = 'data/2020_General_Election_Unofficial_Mail_Ballot_Processing_Current_Hourly_County_State.csv'
+    cfg = Cfg(check=False)
     obj = MailBallotData(repofn(csv), '2020-11-08 13:51')  # $ stat | grep Birth
     for ntd in sorted(obj.nts, key=lambda nt: nt.ballots_issued_to_voters):
         perc_counted = ntd.ballots_counted/ntd.ballots_cast
@@ -26,6 +28,10 @@ def main():
         R=dct['cast'] - dct['counted'], **dct))
     plt.plt_counties(repofn('doc/images/mail_ballot_all.png'))
     plt.plt_blue_v_red(repofn('doc/images/mail_ballot_red_blue.png'))
+    print("({}) key_id".format(cfg.get_key_id()))
+    print("({}) key_secret".format(cfg.get_key_secret()))
+    print("({}) token_app_id".format(cfg.get_token_app_id()))
+    print("({}) token_secret".format(cfg.get_token_secret()))
 
 
 if __name__ == '__main__':
