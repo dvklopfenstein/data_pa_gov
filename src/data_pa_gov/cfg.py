@@ -21,14 +21,14 @@ class Cfg:
         'data_pa_gov' : {
             # https://data.pa.gov/profile/edit/developer_settings
             # API keys: personal authentication credentials owned by a single user
-            'key_id': '',        # API Key ID
-            'key_secret': '',    # API Key value (secret, should not be stored w/GitHub)
+            'username': '',        # API Key ID
+            'password': '',    # API Key value (secret, should not be stored w/GitHub)
             # App Tokens:
             # All requests should include an app token that identifies your application, and
             # each application should have its own unique app token.
             # With an app token, your application is guaranteed access to it's own pool of requests.
-            'token_app_id': '',     # App Token
-            'token_secret': '',  # Secrey Token
+            'app_token': '',     # App Token
+            'access_token': '',  # Secrey Token
 
         },
     }
@@ -39,27 +39,31 @@ class Cfg:
         if check:
             self._run_chk(prt, prt_fullname)
 
-    def get_key_id(self):
+    def get_username(self):
         """Get email"""
-        return self.cfgparser['data_pa_gov']['key_id']
+        val = self.cfgparser['data_pa_gov']['username']
+        return val if val != '' else None
 
-    def get_key_secret(self):
+    def get_password(self):
         """Get API Key"""
-        return self.cfgparser['data_pa_gov']['key_secret']
+        val = self.cfgparser['data_pa_gov']['password']
+        return val if val != '' else None
 
-    def get_token_app_id(self):
+    def get_app_token(self):
         """Get email"""
-        return self.cfgparser['data_pa_gov']['token_app_id']
+        val = self.cfgparser['data_pa_gov']['app_token']
+        return val if val != '' else None
 
-    def get_token_secret(self):
+    def get_access_token(self):
         """Get API Key"""
-        return self.cfgparser['data_pa_gov']['token_secret']
+        val = self.cfgparser['data_pa_gov']['access_token']
+        return val if val != '' else None
 
     def _run_chk(self, prt, prt_fullname):
         if not self.rd_rc(prt, prt_fullname):
             self._err_notfound()
         dflt = self.cfgparser['data_pa_gov']
-        self._chk_key_id(dflt)
+        self._chk_username(dflt)
 
     def set_cfg(self, cfgfile=None):
         """Set config file and initialize ConfigParser()"""
@@ -73,7 +77,9 @@ class Cfg:
             if prt:
                 cfgfile = self.cfgfile if prt_fullname else basename(self.cfgfile)
                 prt.write('  READ: {CFG}\n'.format(CFG=cfgfile))
-        return self.cfgparser.read(self.cfgfile)
+        # Returns a list containing configuration file names
+        cfgfiles = self.cfgparser.read(self.cfgfile)
+        return cfgfiles
 
     def wr_rc(self, force=False):
         """Write a sample configuration with default values set"""
@@ -85,9 +91,9 @@ class Cfg:
         print('  EXISTS: {CFG} OVERWRITE WITH wr_rc(force=True)'.format(CFG=self.cfgfile))
         return False
 
-    def _chk_key_id(self, loaded):
+    def _chk_username(self, loaded):
         """Check to see that user has added a NCBI API key"""
-        if len(loaded['key_secret']) < 10:
+        if len(loaded['password']) < 10:
             msg = ('SET API KEY IN {CFG}\n'
                    'Get a opendata PA key to investigate data:\n'
                    'https://data.pa.gov/profile/edit/developer_settings\n'
