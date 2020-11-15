@@ -87,9 +87,7 @@ class Cfg:
 
     def _chk_key_id(self, loaded):
         """Check to see that user has added a NCBI API key"""
-        try:
-            int(loaded['key_id'], 16)
-        except ValueError:
+        if len(loaded['key_secret']) < 10:
             msg = ('SET API KEY IN {CFG}\n'
                    'Get a opendata PA key to investigate data:\n'
                    'https://data.pa.gov/profile/edit/developer_settings\n'
