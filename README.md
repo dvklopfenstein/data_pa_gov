@@ -1,5 +1,8 @@
 # PA Government Open Data
-Work with the [opendata](https://data.pa.gov/) from the Commonwealth of Pennsylvania
+Work with the [opendata](https://data.pa.gov/) from the Commonwealth of Pennsylvania,
+managed by the [Socrata](https://dev.socrata.com/) Open Data [Python API](https://github.com/socrata/socrata-py)
+
+* [Pennsylvania's Election Data Hub](https://www.dos.pa.gov/VotingElections/BEST/Pages/Data-Hub.aspx)
 
 * Mail in Ballots in Pennsylvania for the Nov 2020 General Election
   * [Summary for Mail-in Ballots](#pa-summary-for-mail-in-ballots)
